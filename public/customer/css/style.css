@@ -1,0 +1,143 @@
+/* Root */
+:root {
+    /* Color */
+    --primaryColor: #ff2a2a;
+
+    /* Font */
+    --mainFont: "Open Sans", sans-serif;
+    --headingFont: "Merriweather", serif;
+}
+
+body {
+    font-family: var(--mainFont);
+}
+.heading {
+    font-family: var(--headingFont);
+    font-size: 24px;
+    font-weight: 700;
+}
+.subheading {
+    font-weight: 300;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-family: var(--headingFont);
+    font-weight: 900;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-brand span {
+    color: var(--primaryColor);
+}
+
+.nav-link {
+    font-family: var(--headingFont);
+}
+
+.nav-link.active {
+    font-weight: 700;
+    color: var(--primaryColor) !important;
+}
+
+.icons-home i {
+    font-size: 1.8rem;
+    color: var(--primaryColor);
+}
+
+.dropdown-menu .container {
+    width: 430px;
+    max-height: 300px; /* atur tinggi maksimal jika konten notifikasi terlalu banyak */
+    overflow-x: auto;
+    /* overflow-y: auto; atur overflow menjadi auto agar ada scrollbar jika konten terlalu banyak */
+}
+
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+/* CUSTOMIZE THE CAROUSEL
+  -------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+    margin-bottom: 4rem;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+    height: 32rem;
+}
+
+/* MARKETING CONTENT
+  -------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .col-lg-4 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+/* rtl:begin:ignore */
+
+/* rtl:end:ignore
+
+/* Featurettes
+  ------------------------- */
+
+.featurette-divider {
+    margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+/* rtl:begin:remove */
+.featurette-heading {
+    letter-spacing: -0.05rem;
+}
+
+/* rtl:end:remove */
+
+/* RESPONSIVE CSS
+  -------------------------------------------------- */
+
+/* Untuk tampilan desktop */
+@media screen and (min-width: 992px) {
+    /* dropdown start */
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        right: 0;
+        left: auto;
+    }
+    /* dropdown end*/
+
+    /* navbar start */
+    .navbar-collapse {
+        padding: 10px;
+    }
+    /* navbar end */
+
+    /* Footer Start */
+    .footer {
+        background-color: #333;
+        color: #fff;
+        padding: 50px 0;
+    }
+    .footer h5 {
+        color: #fff;
+    }
+    .footer ul.list-unstyled li {
+        padding: 5px 0;
+    }
+    .footer p {
+        margin: 0;
+    }
+    /* Footer End */
+}
