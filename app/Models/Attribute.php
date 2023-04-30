@@ -11,8 +11,14 @@ class Attribute extends Model
 
     protected $guarded = ['id'];
 
-    public function product()
+    public function values()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(AttributeValue::class);
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'attribute_product')->withPivot('price');
+    }
+
 }

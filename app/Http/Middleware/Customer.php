@@ -17,7 +17,7 @@ class Customer
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::guard('customer')->check()) {
-            return redirect('/');
+            return redirect('/')->with('warning','You need to log in first');
         }
         return $next($request);
     }

@@ -32,6 +32,7 @@ class CartsController extends Controller
             $cartItems[$product->id] = [
                 'id' => $product->id,
                 'product'=> $product,
+                'name' => $product->name,
                 'quantity'=> 1,
                 'sub_total' => $product->price,
             ];
@@ -40,7 +41,7 @@ class CartsController extends Controller
         session(['cart.items' => $cartItems]);
         // dd($cartItems);
         // return redirect()->route('cart.index');
-        return back();
+        return redirect()->back()->with('success', 'Product has been added to cart!');
     }
 
     public function destroy($id)
@@ -51,6 +52,6 @@ class CartsController extends Controller
             unset($cartItems[$id]);
             session(['cart.items' => $cartItems]);
         }
-        return back();
+        return redirect()->back();
     }
 }

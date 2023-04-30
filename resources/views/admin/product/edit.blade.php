@@ -25,7 +25,6 @@
       <form action="/admin/products/{{ $product->slug }}" method="post" enctype="multipart/form-data"> 
       @method('put')
       @csrf
-      @csrf
       <div class="row">
         <div class="col-md-6">
           <div class="card card-primary">
@@ -119,17 +118,18 @@
             </div>
             <div class="card-body">
               <div class="form-group">
-                <label for="inputEstimatedBudget">Size</label>
-                <input type="text" id="inputEstimatedBudget" class="form-control @error('size')
+                <label for="inputEstimatedBudget">Weight</label>
+                <input type="number" id="inputEstimatedBudget" class="form-control @error('weight')
                 is-invalid
-            @enderror" name="size"  value="{{ $product->size }}" required>
-            @error('size')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+                @enderror" name="weight"  value="{{ $product->weight }}" required>
+                @error('weight')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
               </div>
-              <div class="form-group">
+              
+              {{-- <div class="form-group"> 
                 <label for="inputEstimatedBudget">Color</label>
                 <input type="text" id="inputEstimatedBudget" class="form-control @error('color')
                 is-invalid
@@ -139,7 +139,7 @@
                 {{ $message }}
             </div>
             @enderror
-              </div>
+              </div> --}}
               <div class="form-group">
                 <label for="inputEstimatedBudget">Stock</label>
                 <input type="number" id="stock" name="stock"class="form-control @error('stock')
@@ -171,7 +171,7 @@
       <div class="row">
         <div class="col-12">
           <a href="/admin/products" class="btn btn-secondary">Cancel</a>
-          <input type="submit"class="btn btn-success float-right">
+          <input type="submit" class="btn btn-success float-right">
         </div>
       </div>
     </form>

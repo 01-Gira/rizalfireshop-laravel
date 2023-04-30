@@ -10,27 +10,22 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function authenticate (Request $request){
-        if ($request->isMethod('post')) {
-            $rules = [
-                'email' => 'required|email|max:255',
-                'password' => 'required|max:30'
-            ];
-            $credentials = $request->validate($rules);
+        $credentials = $request->validate([
+            'email' => ['required', 'email:dns'],
+            'password' => ['required']
+        ]);
 
-            if (Auth::guard('customer')->attempt($credentials)) {
-                $request->session()->regenerate();
+        if (Auth::guard('customer')->attempt($credentials)) {
+            $request->session()->regenerate();
 
-               
-
-                return redirect()->intended('/');
-            }
-
+            return redirect()->back()->with('success','Log in successfully!');
+        }else{
             return redirect()->back()->with([
                 'error' => 'Invalid Email or Password!',
             ]);
         }
 
-        return view('customer.home');
+        return redirect()->back();
     }
 
     public function logout(Request $request)
@@ -41,6 +36,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->back()->with('success','Log out successfull!');
     }
 }

@@ -35,7 +35,7 @@
       </li>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Offcanvas 2</h5>
+            <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Cart</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
@@ -63,7 +63,15 @@
                     </div>
                   </div>
                   @endforeach
-                  
+                  @if(session()->has('warning'))
+                    <div class="alert alert-danger alert-dismissible fade show m-auto" role="alert">
+                      {{ session('warning') }}
+                      <button type="button" class="close btn btn-danger" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  @endif
+                  <a href="/checkout" class="btn btn-danger mt-2">Procced to checkout</a>
                   @else
                   <p>Cart is empty</p>
                   @endif
@@ -73,7 +81,7 @@
     </ul>
     <div class="offcanvas offcanvas-start"  tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
@@ -118,33 +126,34 @@
               </a>
               <ul class="dropdown-menu">
                 <div class="container">
-                  @if ($cart)
-                  @foreach ($cart as $item)
                   <div class="row">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="{{ asset('storage/'. $item['product']->image) }}"></div>
-                        <div class="col">
-                            <div class="row text-muted">T-shirt</div>
-                            <div class="row">{{ $item['product']->name }}</div>
-                        </div>
-                        <div class="col ms-2">
-                            <a href="#">-</a><a href="#" class="border">{{ $item['quantity'] }}</a><a href="#">+</a>
-                        </div>
-                        <div class="col">Rp.{{ number_format($item['product']->price) }}</div>
-                        <div class="col">
-                          <form action="{{ route('cart.destroy', $item['id']) }}" method="post">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit"><i class="bi bi-trash"></i></button>
-                          </form>
-                        </div>
-                    </div>
+                    @if ($cart)
+                    @foreach ($cart as $item)
+                    
+                      <div class="col-2"><img class="img-fluid" src="{{ asset('storage/'. $item['product']->image) }}"></div>
+                      <div class="col">
+                          <div class="row text-muted">T-shirt</div>
+                          <div class="row">{{ $item['product']->name }}</div>
+                      </div>
+                      <div class="col ms-2">
+                          <a href="#">-</a><a href="#" class="border">{{ $item['quantity'] }}</a><a href="#">+</a>
+                      </div>
+                      <div class="col">Rp.{{ number_format($item['product']->price) }}</div>
+                      <div class="col">
+                        <form action="{{ route('cart.destroy', $item['id']) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"><i class="bi bi-trash"></i></button>
+                        </form>
+                      </div>
+                    @endforeach
+          
+                    @else
+                    <p>Cart is empty</p>
+                    @endif
                   </div>
-                  @endforeach
-                  
-                  @else
-                  <p>Cart is empty</p>
-                  @endif
+                  <a type="button" href="/cart" class="btn mb-1 mt-2" style="width: 100%; background-color: gray; color:white;">Cart</a>
+                  <a type="button" href="/checkout" class="btn btn-danger" style="width: 100%">Procced to checkout</a>
               </div>
               </ul>
             </div>
@@ -156,6 +165,7 @@
                 <i class="bi bi-person"></i>
               </a>
               <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/orders">Orders</a></li>
                 <li><a class="dropdown-item" href="/logout">Log out</a></li>
               </ul>
             </div>
@@ -181,7 +191,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/shop" method="GET">
+        <form action="/shop">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Search Product..." name="search" required>
             <div class="input-group-append">
@@ -208,19 +218,18 @@
          <!-- Tab bar -->
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link text-black active" data-toggle="tab" href="#tab1">Sign in</a>
+            <a class="nav-link text-black active" data-bs-toggle="tab" role="tab" href="#sign-tabpane">Sign in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-black" data-toggle="tab" href="#tab2">Register</a>
+            <a class="nav-link text-black" data-bs-toggle="tab" role="tab" href="#register-tabpane">Register</a>
           </li>
         </ul>
         <!-- Tab content -->
         <div class="tab-content">
-          <div id="tab1" class="tab-pane fade show active"> 
+          <div id="sign-tabpane" class="tab-pane fade show active"> 
             <form action="{{ url('/login') }}" method="post">
               <div class="content m-3">
                 <!-- Login form here -->
-              
                 @csrf
                 <div class="input-group mb-3">
                   <input type="email" name="email" class="form-control
@@ -269,7 +278,7 @@
                   </div>
                   <!-- /.col -->
                   <div class="col-6" style="width: 100%">
-                    <p>Doesnt have have an account yet? <a href="#tab2">Register</a> now!</p>
+                    <p>Doesnt have have an account yet? <a data-bs-toggle="tab" role="tab" href="#register-tabpane">Register</a> now!</p>
                   </div>
                  
                   <!-- /.col -->
@@ -280,9 +289,78 @@
              </div>            
           </form>
           </div>
-          <div id="tab2" class="tab-pane fade">
-            <h3>Isi tab 2</h3>
-            <p>Isi tab 2 di sini</p>
+          <div id="register-tabpane" class="tab-pane fade">
+            <form action="/register" method="post">
+              @csrf
+              <div class="content m-3">
+                <!-- Login form here -->
+                <div class="input-group mb-3">
+                  <input type="name" name="name" class="form-control
+                    @error('name')
+                    is-invalid
+                    @enderror" placeholder="Name" required/>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="bi bi-person"></i>
+                    </div>
+                  </div>
+                  @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                  @enderror
+                </div>
+                <div class="input-group mb-3">
+                  <input type="email" name="email" class="form-control
+                    @error('email')
+                    is-invalid
+                    @enderror" placeholder="Email" required/>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="bi bi-person"></i>
+                    </div>
+                  </div>
+                  @error('email')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                  @enderror
+                </div>
+                <div class="input-group mb-3">
+                  <input
+                    type="password"
+                    name="password"
+                    class="form-control
+                    @error('password')
+                    is-invalid
+                    @enderror"
+                    placeholder="Password" 
+                    required
+                  />
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="bi bi-lock-fill"></i>
+                    </div>
+                  </div>
+                  @error('password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                  @enderror
+                </div>
+                <div class="row">
+                  <div class="col-8">
+                    <div class="icheck-primary">
+                      <input type="checkbox" id="remember" required/>
+                      <label for="remember"> Aggreed </label>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-block mt-2" style="width: 100%">
+                  Register
+                </button>
+             </div>            
+          </form>
           </div>
         </div>
       </div>
@@ -295,4 +373,53 @@
 </div>
 
 
+<!-- Notification Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="notificationModalLabel">Notification</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        @if(session()->has('success'))
+        <div class="alert alert-success">
+          <img src="/success.gif" alt="Success">
+          {{ session('success') }}
+        </div>
+        @elseif(session()->has('error'))
+        <div class="alert alert-danger">
+          <img src="/error.gif" alt="Error">
+          {{ session('error') }}
+        </div>
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (session()->has('success'))
+  <script>
+      $(function() {
+          $('#notificationModal').modal('show');
+      });
+  </script>
+@elseif (session()->has('error'))
+  <script>
+    $(function() {
+        $('#notificationModal').modal('show');
+    });
+   
+  </script>
+@endif
+
+<script>
+   $(function() {
+      $('#notificationModal').on('hidden.bs.modal', function() {
+          // Hapus data session setelah modal ditutup
+          {{ session()->forget('success') }}
+          {{ session()->forget('error') }}
+      });
+    });
+</script>
 

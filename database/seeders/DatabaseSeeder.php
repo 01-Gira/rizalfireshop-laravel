@@ -7,9 +7,11 @@ namespace Database\Seeders;
 use App\Models\Admin;
 use App\Models\Attribute as ModelsAttribute;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Product;
 use Attribute;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,8 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Customer::factory(10)->create();
-
+ 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
@@ -31,7 +32,17 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationsTableSeeder::class);
 
 
-        Product::factory(20)->create();
+        Product::factory(100)->create();
+        Customer::factory(5)->create();
+
+        Customer::create([
+            'name' => 'Gira',
+            'email' => '123@gmail.com',
+            'mobile' => fake()->phoneNumber(),
+            'password' => bcrypt('123456'), // password default 'password'
+            'remember_token' => Str::random(10),
+        ]);
+
 
         Category::create([
             'name' => 'T-shirt',
@@ -47,15 +58,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Hoodie',
             'slug' => 'hoodie',
             
-        ]);
-
-        ModelsAttribute::create([
-            'name' => 'Size',
-            'type' => implode(',', ['S', 'M', 'L', 'XL']),
-        ]);
-        ModelsAttribute::create([
-            'name' => 'Color',
-            'type' => implode(',', ['Red', 'Black']),
         ]);
 
     }

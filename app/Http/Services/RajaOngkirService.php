@@ -57,22 +57,6 @@ class RajaOngkirService
 
         return json_decode($response->getBody(), true)['rajaongkir']['results'];
 
-        //  $origin = env('RAJAONGKIR_ORIGIN');
-
-        // $url = url('/api/cost');
-        // $response = $this->client->post($url, [
-        //     'headers' => [
-        //         'key' => $this->apiKey,
-        //     ],
-        //     'form_params' => [
-        //         'origin' => $origin,
-        //         'destination' => $destination,
-        //         'weight' => $weight,
-        //         'courier' => $courier,
-        //     ],
-        // ]);
-
-        // return json_decode($response->getBody(), true)['rajaongkir']['results'];
     }
 }
 

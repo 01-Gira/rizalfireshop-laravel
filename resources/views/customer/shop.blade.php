@@ -6,15 +6,14 @@
         <div class="col-lg-3 col-md-12">
             <h2 class="text-uppercase mb-3">Filter</h2>
             <form method="GET" action="/shop">
-                
                 <!-- Price Range Start -->
                 <div class="form-group">
                 <label for="price_range">Range Harga:</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Harga Min" name="min_price">
-                        <span class="input-group-text">-</span>
-                        <input type="text" class="form-control" placeholder="Harga Max" name="max_price">
-                    </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Harga Min" name="min_price">
+                    <span class="input-group-text">-</span>
+                    <input type="text" class="form-control" placeholder="Harga Max" name="max_price">
+                </div>
                 </div>
                 <!-- Price Range End -->
 
@@ -37,10 +36,10 @@
                 <label for="sort">Sortir:</label>
                 <select class="form-control" id="sort" name="sort">
                     <option value="">Tidak Ada</option>
-                    <option value="terpopuler">Terpopuler</option>
-                    <option value="terbaru">Terbaru</option>
-                    <option value="termurah">Termurah</option>
-                    <option value="termahal">Termahal</option>
+                    <option value="sale desc">Terpopuler</option>
+                    <option value="created_at desc">Terbaru</option>
+                    <option value="price asc">Termurah</option>
+                    <option value="price desc">Termahal</option>
                 </select>
                 </div>
                 <!-- Sortir End -->
@@ -66,7 +65,7 @@
             <div class="row pb-3">
                 <div class="col-12 pb-1">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <form action="/shop" method="GET">
+                        <form action="/shop">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Search Product..." name="search" required>
                                 <div class="input-group-append">

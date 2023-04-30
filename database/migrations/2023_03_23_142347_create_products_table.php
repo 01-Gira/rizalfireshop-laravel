@@ -16,14 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('description');
-            $table->string('stock');
-            $table->decimal('price', 10, 2);
-            $table->foreignId('category_id');
+            $table->integer('stock');
+            $table->bigInteger('price');
+            $table->unsignedBigInteger('category_id');
             $table->integer('weight');
-            $table->string('size')->nullable();
-            $table->string('color')->nullable();
             $table->string('image')->nullable();
-            $table->string('sales')->nullable();
+            $table->string('sale')->nullable();
             $table->timestamps();
         });
     }

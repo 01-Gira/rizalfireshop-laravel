@@ -65,7 +65,7 @@
             </a>
             </li>
             <li class="nav-item">
-            <a href="pages/layout/boxed.html" class="nav-link">
+            <a href="/admin/categories" class="nav-link {{ $active == 'categories' ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Category</p>
             </a>
@@ -84,6 +84,30 @@
             </li>
         </ul>
         </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-truck"></i>
+                <p>
+                Order
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right" id="new-orders-count"></span>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                <a href="/admin/orders" id="set-new-orders-count" class="nav-link {{ $active == 'orders' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>All Order</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="/admin/orders/create" class="nav-link {{ $active == 'add_order' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Add New</p>
+                </a>
+                </li>
+            </ul>
+            </li>
         <li class="nav-item">
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-chart-pie"></i>
@@ -623,3 +647,33 @@
 </div>
 <!-- /.sidebar -->
 </aside>
+
+<script>
+    function getNewOrdersCount() {
+        $.ajax({
+            url: '{{ route("get-new-orders-count") }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                $('#new-orders-count').text(response.newOrdersCount);
+            }
+        });
+    }
+
+    setInterval(getNewOrdersCount, 2000);
+
+    $(document).on('click', '#set-new-orders-count', function() {
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("change-status-orders") }}',
+            data: { status : 'old' },
+            success: function(response) {
+                $('#new-orders-count').text('0');
+                console.log(response)
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        })
+    });
+</script>

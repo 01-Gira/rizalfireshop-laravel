@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script type="text/javascript"
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key='{{ config('midtrans.client_key') }}'></script>
     <title>Rizal Fire Shop | {{ $title }}</title>
 
     {{-- CSS BOOTSTRAP --}}
@@ -23,21 +27,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+   
 
     <!-- Custom CSS styles-->
     <link href="{{ url('customer/css/style.css') }}" rel="stylesheet">
 
 </head>
 <body>
-    @if (session()->has('error'))
+    {{-- @if (session()->has('error'))
     <div class="alert alert-danger alert-dismissible fade show col-lg-8 m-auto" role="alert">
         {{ session('error') }}
         <button type="button" class="close btn btn-danger" data-bs-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    @endif
+    @endif --}}
 
     <header>
     @include('customer.layout.header') 
@@ -51,6 +55,8 @@
 
     {{-- @include('customer.layout.footer') --}}
 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="{{ url('customer/js/main.js') }}"></script>
 
 </body>

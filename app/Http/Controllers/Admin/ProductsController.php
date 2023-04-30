@@ -15,11 +15,14 @@ class ProductsController extends Controller
 {
     
     public function index(){
-        $title = 'Products';
-        $active = 'products';
-        $products = Product::paginate(5);
-
-        return view('admin.product.products', compact('title', 'active', 'products'));
+   
+        // return view('admin.product.products', compact('title', 'active', 'products', 'categories'));
+        return view('admin.product.products', [
+            'title' => 'Products',
+            'active' => 'products',
+            'products' => Product::latest()->filter(request(['search', 'category', 'sort', 'min_price' && 'max_price']))->paginate(7)->withQueryString(),
+            'categories' => Category::all()
+        ]);
     }
 
 
@@ -38,17 +41,13 @@ class ProductsController extends Controller
             'stock' => ['required'],
             'price' => ['required'],
             'category_id' => ['required'],
-            'size' => ['required'],
-            'color' => ['required'],
+            'weight' => ['required'],
             'image' => ['image','file','max:1024']
         ]
         );
-
         if ($request->file('image')){
             $validatedData['image'] = $request->file('image')->store('products-images');
         }
-
-        // dd($validatedData);
         Product::create($validatedData);
 
         return redirect('/admin/products')->with('success', 'Produk has been added!');
@@ -84,8 +83,6 @@ class ProductsController extends Controller
             'stock' => ['required'],
             'price' => ['required'],
             'category_id' => ['required'],
-            'size' => ['required'],
-            'color' => ['required'],
             'image' => ['image','file','max:1024']
         ]);
 
@@ -93,11 +90,11 @@ class ProductsController extends Controller
             $rules['slug'] = ['required', 'unique:products'];
         }
 
-
         if ($request->file('image')){
             $validatedData['image'] = $request->file('image')->store('post-images');
         }
 
+        // dd($validatedData);
         $product->update($validatedData);
 
         return redirect('/admin/products')->with('success', 'Product has been updated!');
@@ -121,4 +118,12 @@ class ProductsController extends Controller
         // return response()->json(['slug' => $slug]);
     }
 
+    public function updateStock(Request $request, Product $product)
+    {
+        $stock = $request->input('stock');
+        $product->updateStock($stock);
+
+
+        return redirect()->back()->with('success', 'Product stock updated successfully!');
+    }
 }

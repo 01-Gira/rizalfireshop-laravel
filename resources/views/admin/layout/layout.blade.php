@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | {{ $title }}</title>
+  <title>Rizal Fire Shop Admin | {{ $title }}</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -29,11 +31,11 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <!-- Preloader -->
+  {{-- <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="{{ url('admin/images/AdminLTELogo.png') }}" alt="AdminLTELogo" height="60" width="60">
   </div>
-  
+   --}}
   <!-- Navbar -->
   @include('admin.layout.header')
   <!-- /.navbar -->
@@ -55,6 +57,9 @@
   @include('admin.layout.footer')
 </div>
 <!-- ./wrapper -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
 <!-- jQuery -->
 <script src="{{ url('admin/plugins/jquery/jquery.min.js') }}"></script>

@@ -21,11 +21,9 @@ class ProductFactory extends Factory
             'slug' => $this->faker->slug(),
             'description' => $this->faker->sentence(),
             'stock' => 10,
-            'price' => 150000,
+            'price' => $this->faker->numberBetween(100000, 3000000),
             'category_id' => mt_rand(1,3),
             'weight' => 200,
-            'size' => implode(',', ['S', 'M', 'L', 'XL']),
-            'color'  => implode(',', ['RED', 'BLACK', 'WHITE', 'BLUE']),
         ];
     }
 }

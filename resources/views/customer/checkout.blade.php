@@ -6,20 +6,19 @@
     @csrf
     <div class="row">
         <div class="col">  
-
                 <div class="row">
                     <div class="col form-group">
                         <label for="name">First Name</label>
-                        <input type="text" class="form-control">
+                        <input type="text" name="first_name" class="form-control" required>
                     </div>
                     <div class="col form-group">
                         <label for="name">Last Name</label>
-                        <input type="text" class="form-control">
+                        <input type="text" name="last_name" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="street_address">Street Address</label>
-                    <input type="text" class="form-control">
+                    <input type="text" name="street_address" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="province">Province</label>
@@ -39,26 +38,25 @@
                 <div class="row">
                     <div class="col form-group">
                         <label for="district">District</label>
-                        <input type="text" class="form-control">
+                        <input type="text" name="district" class="form-control" required>
                     </div>
                     <div class="col form-group">
                         <label for="postal_code">Postal Code</label>
-                        <input type="text" class="form-control">
+                        <input type="number" name="postal_code" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone</label>
-                    <input type="text" class="form-control">
+                    <input type="text" id="phone" name="phone" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control">
+                    <input type="text" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="message">Message (optional)</label>
-                    <textarea name="" class="form-control"></textarea>
+                    <textarea name="message" class="form-control"></textarea>
                 </div>
-            
         </div>
         <div class="col-12 col-md-4 col-lg-4">
             <div class="row">
@@ -77,7 +75,7 @@
             <hr>
             <div class="row">
                 <div class="col">Subtotal</div>
-                <div class="col text-right">Rp.{{ number_format($subTotal) }}</div>
+                <div class="col text-right"><span id="subtotal" data-subtotal="{{ $subTotal }}">Rp.{{ number_format($subTotal) }}</span></div>
             </div>
             <hr>
             <div class="row">
@@ -94,9 +92,9 @@
                         </select>  
                     </div>
                     <div class="form-group">
-                        <label for="service">Layanan:</label>
-                        <select class="form-control" name="service" id="service">
-                          <option value="">Pilih Layanan</option>
+                        <label for="service">Service:</label>
+                        <select class="form-control" name="courier_service" id="service">
+                          <option value="">Select Service</option>
                         </select>
                       </div>
                 </div>
@@ -104,13 +102,14 @@
             <hr>
             <div class="row">
                 <div class="col">Subcharge</div>
-                <div class="col text-right">Rp.500</div>
+                <div class="col text-right"><span id="subcharge" data-subcharge="500"></span>Rp.500</div>
             </div>
             <hr>
             <div class="row">
                 <div class="form-group">
                     <label for="total_cost">Total Biaya</label>
-                
+                    <span id="total">Rp.0</span>
+                    <input type="text" name="total_price" hidden>
                 </div>
             </div>
             <hr>
@@ -119,6 +118,5 @@
     </div>
     </form>
 </div>
-
 
 @endsection

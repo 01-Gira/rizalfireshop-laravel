@@ -18,14 +18,18 @@ class Product extends Model
 
         $query->when($filters['search'] ?? false, function($query, $search){
             return $query->where('name','like','%' . $search . '%')
-                    ->orWhere('category','like','%' . $search . '%');
+                        ->where('category_id', 'like', '%' . $search . '%');
         });
 
-        // $query->when($filters['category'] ?? false, function($query, $category){
-        //     return $query->whereHas('category', function($query) use ($category){
-        //         $query->where('slug', $category);
-        //     });
-        // });
+        $query->when($filters['category'] ?? false, function($query, $category) {
+            return $query->where('category_id', $category);
+        });
+
+        
+        $query->when($filters['sort'] ?? false, function($query, $sort) {
+            $sort = explode(' ', $sort);
+            return $query->orderBy($sort[0], $sort[1]);
+        });
         
         // $query->when($filters['author'] ?? false, fn($query, $author)=>
         //         $query->whereHas('author', fn($query) =>
@@ -34,21 +38,18 @@ class Product extends Model
         //             );
     }
     
+    public function updateStock($stock)
+    {
+        $this->stock += $stock;
+        $this->save();
+    }
+
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
     
-    
-    public function setSizeAttribute($value)
-    {
-        $this->attributes['size'] = str_replace(' ', ', ', $value);
-    }
-    
-    public function getColorAttribute($value)
-    {
-        return str_replace(' ', ', ', $value);
-    }
 
     public function getRouteKeyName()
     {
@@ -63,4 +64,15 @@ class Product extends Model
             ]
         ];
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_products')->withPivot('quantity');
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'attribute_product')->withPivot('price');
+    }
+
 }

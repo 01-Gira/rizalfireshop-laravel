@@ -58,6 +58,7 @@
                 </div>
                 @enderror
               </div>
+             
               <div class="form-group">
                 <label for="inputDescription">Product Description</label>
                 <textarea id="inputDescription" class="form-control @error('description')
@@ -107,7 +108,6 @@
           <div class="card card-secondary">
             <div class="card-header">
               <h3 class="card-title">Product Quantity</h3>
-
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                   <i class="fas fa-minus"></i>
@@ -116,37 +116,26 @@
             </div>
             <div class="card-body">
               <div class="form-group">
-                <label for="inputEstimatedBudget">Size</label>
-                <input type="text" id="inputEstimatedBudget" class="form-control @error('size')
+                <label for="inputEstimatedBudget">Weight</label>
+                <input type="number" id="inputEstimatedBudget" class="form-control @error('weight')
                 is-invalid
-            @enderror" name="size"  value="{{ old('size') }}" required>
-            @error('size')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-              </div>
-              <div class="form-group">
-                <label for="inputEstimatedBudget">Color</label>
-                <input type="text" id="inputEstimatedBudget" class="form-control @error('color')
-                is-invalid
-            @enderror" name="color" value="{{ old('color') }}" required>
-            @error('color')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+                @enderror" name="weight"  value="{{ old('weight') }}" required>
+                @error('weight')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
               </div>
               <div class="form-group">
                 <label for="inputEstimatedBudget">Stock</label>
                 <input type="number" id="inputEstimatedBudget" class="form-control @error('stock')
-                is-invalid
-            @enderror" name="stock" value="{{ old('stock') }}" required>
-            @error('stock')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
+                  is-invalid
+                @enderror" name="stock" value="{{ old('stock') }}" required>
+                @error('stock')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
               </div>
               <div class="form-group">
                 <label for="inputSpentBudget">Price</label>
@@ -168,7 +157,7 @@
       <div class="row">
         <div class="col-12">
           <a href="/admin/products" class="btn btn-secondary">Cancel</a>
-          <input type="submit" value="Create new Project" class="btn btn-success float-right" onclick="return confirm('Are you sure?')">
+          <input type="submit" value="Create new Product" class="btn btn-success float-right" onclick="return confirm('Are you sure?')">
         </div>
       </div>
     </form>
