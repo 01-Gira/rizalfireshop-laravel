@@ -666,7 +666,7 @@
         $.ajax({
             type: 'POST',
             url: '{{ route("change-status-orders") }}',
-            data: { status : 'old' },
+            data: { status : 'old' },   
             success: function(response) {
                 $('#new-orders-count').text('0');
                 console.log(response)

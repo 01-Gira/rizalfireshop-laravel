@@ -73,7 +73,8 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
     Route::group(['middleware'=>['admin']], function(){
         Route::get('dashboard','DashboardController@index');
         Route::get('get-new-order-count','DashboardController@newOrdersCount')->name('get-new-orders-count');
-        Route::post('orders/change-status', 'DashboardController@changeStatusOrders' )->name('change-status-orders');
+        Route::post('change-status', 'DashboardController@changeStatusOrders' )->name('change-status-orders');
+
         // Product
         Route::get('products/checkSlug','ProductsController@checkSlug');
         Route::put('products/{product:slug}/update-stock', [ProductsController::class, 'updateStock'])->name('products.update-stock');

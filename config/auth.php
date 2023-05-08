@@ -35,7 +35,7 @@ return [
     |
     */
 
-    'guards' => [
+'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -91,9 +91,9 @@ return [
             'model' => App\Models\Customer::class,
         ],
 
-        // 'users' => [
+        // 'admin-api' => [
         //     'driver' => 'database',
-        //     'table' => 'users',
+        //     'table' => 'admins',
         // ],
     ],
 
