@@ -9,11 +9,19 @@
         <div class="row mb-2">
           <div class="col mt-2">
             <h1>Products</h1>
-            <div class="col-sm-6 mt-2">
-              <a class="btn btn-success btn-sm" href="/admin/products/create">
-                <i class="fas fa-plus"> </i>
-                Create Product
-              </a>
+            <div class="row">
+              <div class="col-sm-6 mt-2">
+                <a class="btn btn-success btn-sm" href="/admin/products/create">
+                  <i class="fas fa-plus"> </i>
+                  Create Product
+                </a>
+              </div>
+              <div class="col-sm-6 mt-2">
+                <a class="btn btn-warning btn-sm" href="/admin/products/export">
+                  <i class="fas fa-plus"> </i>
+                  Export Excel
+                </a>
+              </div>
             </div>
             @if (session()->has('success'))
             <div class="alert alert-success alert-dismissible fade show col-lg-8 mt-2" role="alert" style="width: 100%">
@@ -59,32 +67,32 @@
           <table class="table table-striped projects">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Product Name</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Category</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Product Name</th>
+                <th class="text-center">Stock</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Category</th>
                 {{-- <th>Size</th>
                 <th>Color</th> --}}
-                <th></th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody> 
               @foreach ($products as $product )
               <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>
+                <td class="text-center">{{ $loop->iteration }}</td>
+                <td class="text-center">
                   <a> {{ $product->name }}</a>
                   <br />
                   <small> Created {{ $product->created_at->format('d/m/Y H:i:s') }} </small>
-                </td>
-                <td>
+                </td class="text-center">
+                <td class="text-center">
                   <a> {{ $product->stock }} </a>
                 </td>
-                <td>
+                <td class="text-center">
                   <a> Rp.{{ number_format($product->price, 0, ',', '.') }} </a>
                 </td>
-                <td>
+                <td class="text-center">
                   <a> {{ $product->category->name }}</a>
                 </td>
                 {{-- <td>

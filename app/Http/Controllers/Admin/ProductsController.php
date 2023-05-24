@@ -8,6 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -113,9 +115,6 @@ class ProductsController extends Controller
     {
         $slug = SlugService::createSlug(Product::class, 'slug', $request->name);
         return response()->json(['slug' => $slug]);
-        // $name = $request->name ?? ''; // if $request->name is null, set $name to empty string
-        // $slug = SlugService::createSlug(Product::class, 'slug', $name);
-        // return response()->json(['slug' => $slug]);
     }
 
     public function updateStock(Request $request, Product $product)
@@ -125,5 +124,10 @@ class ProductsController extends Controller
 
 
         return redirect()->back()->with('success', 'Product stock updated successfully!');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }

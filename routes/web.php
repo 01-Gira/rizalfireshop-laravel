@@ -76,6 +76,8 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::post('change-status', 'DashboardController@changeStatusOrders' )->name('change-status-orders');
 
         // Product
+        Route::get('products/dashboard', 'ProductController@dashboard');
+        Route::get('products/export','ProductsController@exportExcel');
         Route::get('products/checkSlug','ProductsController@checkSlug');
         Route::put('products/{product:slug}/update-stock', [ProductsController::class, 'updateStock'])->name('products.update-stock');
         Route::resource('products', ProductsController::class);

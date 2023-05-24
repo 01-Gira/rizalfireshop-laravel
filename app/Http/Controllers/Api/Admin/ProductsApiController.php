@@ -15,10 +15,13 @@ class ProductsApiController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        try {
+            $products = Product::all();
 
-        // return response()->json(['data' => $products]);
-        return ProductResource::collection($products);
+            return ProductResource::collection($products);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'Error : '.$e->getMessage()]);
+        }
     }
 
     /**
@@ -34,6 +37,7 @@ class ProductsApiController extends Controller
      */
     public function store(Request $request)
     {
+       try {
         $validatedData = $request->validate([
             'name' => ['required', 'max:70'],
             'slug'  => ['required', 'unique:products'],
@@ -51,6 +55,9 @@ class ProductsApiController extends Controller
         Product::create($validatedData);
 
         return response()->json(['msg' => 'Product has been added! Successfully']);
+       } catch (Exception $e) {
+        return response()->json(['msg' => 'Error : '.$e->getMessage()]);
+       }
     }
 
     /**
@@ -58,9 +65,13 @@ class ProductsApiController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::findOrFail($id);
-        // return response()->json(['data' => $product]);
-        return new ProductDetailResource($product);
+        try {
+            $product = Product::findOrFail($id);
+            // return response()->json(['data' => $product]);
+            return new ProductDetailResource($product);
+        } catch (Exception $e) {
+            return response()->json(['msg' => 'Error : '.$e->getMessage()]);
+        }
     }
 
     /**
@@ -68,27 +79,31 @@ class ProductsApiController extends Controller
      */
     public function edit(string $id)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:255'],
-            'description' => ['required','max:255'],
-            'stock' => ['required'],
-            'price' => ['required'],
-            'category_id' => ['required'],
-            'image' => ['image','file','max:1024']
-        ]);
-
-        if ($request->slug != $product->slug){
-            $rules['slug'] = ['required', 'unique:products'];
+        try {
+            $validatedData = $request->validate([
+                'name' => ['required', 'max:255'],
+                'description' => ['required','max:255'],
+                'stock' => ['required'],
+                'price' => ['required'],
+                'category_id' => ['required'],
+                'image' => ['image','file','max:1024']
+            ]);
+    
+            if ($request->slug != $product->slug){
+                $rules['slug'] = ['required', 'unique:products'];
+            }
+    
+            if ($request->file('image')){
+                $validatedData['image'] = $request->file('image')->store('post-images');
+            }
+    
+            // dd($validatedData);
+            $product->update($validatedData);
+    
+            return response()->json(['msg'=>'Product has been updated! Successfully']);
+        } catch (Exception $e) {
+            return response()->json(['msg'=>'Error : '.$e->getMessage()]);
         }
-
-        if ($request->file('image')){
-            $validatedData['image'] = $request->file('image')->store('post-images');
-        }
-
-        // dd($validatedData);
-        $product->update($validatedData);
-
-        return response()->json(['msg'=>'Product has been updated! Successfully']);
     }
 
     /**
@@ -97,6 +112,7 @@ class ProductsApiController extends Controller
     public function update(Request $request, string $id)
     {   
         
+       try {
         $product = Product::findOrFail($id);
 
         if (!$product) {
@@ -128,6 +144,9 @@ class ProductsApiController extends Controller
         $product->update($validatedData);
 
         return response()->json(['msg' => 'Product has been updated! Successfully']);
+       }catch (Exception $e) {
+        return response()->json(['msg' => 'Error : '.$e->getMessage()]);
+       }
     }
 
     /**
@@ -135,6 +154,16 @@ class ProductsApiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            if($product->image){
+                Storage::delete($product->image);
+            }
+            Product::destroy($product->id);
+            return response()->json(['msg'=>'Product has been deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['msg'=>'Error : '.$e->getMessage()]);
+        }
+        
     }
 }

@@ -10,65 +10,34 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function authenticate (Request $request){
-        // $credentials = $request->validate([
-        //     'email' => ['required', 'email:dns'],
-        //     'password' => ['required']
-        // ]);
+        $credentials = $request->validate([
+            'email' => ['required'],
+            'password' => ['required']
+        ]);
 
-        // if (Auth::guard('customer')->attempt($credentials)) {
-        //     $request->session()->regenerate();
-
-        //     return redirect()->back()->with('success','Log in successfully!');
-        // }else{
-        //     return redirect()->back()->with([
-        //         'error' => 'Invalid Email or Password!',
-        //     ]);
-        // }
-
-        // return redirect()->back();
-
-        
-        $rules = [
-            'email' => 'required|email|max:255',
-            'password' => 'required|max:30'
-        ];
-
-        $customMessages = [
-            'email.required' => 'Email is required',
-            'email.email' => 'Valid email is required',
-            'password.required' => 'Password is required'
-        ];
-
-        $credentials = $request->validate($rules, $customMessages);
-        
-        // // dd($credentials);
+        // $credentials = $request->validate($rules, $customMessages);
 
         if (Auth::guard('customer')->attempt($credentials)) {
-            $user = Auth::guard('customer')->user();
+            $request->session()->regenerate();
 
-
-            // / Generate a new access token for the user
-            $token = $user->createToken('authToken', ['customer'])->plainTextToken;
-            return response()->json(['token' => $token]);
+            return redirect()->back()->with('success','Log in successfully!');
         }else{
-      
-            return response()->json(['message' => 'Email or Password is Invalid!'], 401);
-    
+            return redirect()->back()->with([
+                'error' => 'Invalid Email or Password!',
+            ]);
         }
 
-        return response()->json(['user' => $user, 'token' => $token], 200);
+        return redirect()->back();
     }
 
     public function logout(Request $request)
     {
-        // Auth::guard('admin')->logout();
+        Auth::guard('admin')->logout();
 
-        $request->user()->currentAccessToken()->delete();
+        $request->session()->invalidate();
 
-        // $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        // $request->session()->regenerateToken();
-
-        // return redirect()->back()->with('success','Log out successfull!');
+        return redirect()->back()->with('success','Log out successfull!');
     }
 }
