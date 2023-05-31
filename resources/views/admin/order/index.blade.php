@@ -60,37 +60,37 @@
           <table class="table table-striped projects">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Courier</th>
-                <th>Total Price</th>
-                <th>Status</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Order ID</th>
+                <th class="text-center">Customer Name</th>
+                <th class="text-center">Courier</th>
+                <th class="text-center">Total Price</th>
+                <th class="text-center">Status</th>
                 {{-- <th>Size</th>
                 <th>Color</th> --}}
-                <th></th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody> 
               @foreach ($orders as $order )
               <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>
+                <td class="text-center">{{ $loop->iteration }}</td>
+                <td class="text-center">
                   <a> {{ $order->order_id }} </a>
                   <br />
                   <small> Created {{ $order->created_at->format('d/m/Y H:i:s') }} </small>
                 </td>
-                <td>
+                <td class="text-center">
                   <a> {{ $order->name }}</a>
                   
                 </td>
-                <td>
+                <td class="text-center">
                   <a> {{ $order->courier }} </a>
                 </td>
-                <td>
+                <td class="text-center">
                   <a> Rp.{{ number_format($order->total_price, 0, ',', '.') }}</a>
                 </td>
-                <td>
+                <td class="text-center">
                     <a> {{ $order->transaction_status }}</a>
                   </td>
                 {{-- <td>

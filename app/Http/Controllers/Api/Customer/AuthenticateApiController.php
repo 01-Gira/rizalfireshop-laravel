@@ -6,31 +6,51 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Dotenv\Validator;
+// use Dotenv\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthenticateApiController extends Controller
 {
     public function register(Request $request){
         try {
-            $validatedData = $request->validate([
+            // $validatedData = $request->validate([
+            //     'name' => ['required', 'max:60'],
+            //     'email' => ['required', 'unique:customers,email', 'email:dns'],
+            //     'password' => ['required', 'min:6',]
+            // ]);
+
+            $validatedData = Validator::make($request->all(), [
                 'name' => ['required', 'max:60'],
                 'email' => ['required', 'unique:customers,email', 'email:dns'],
                 'password' => ['required', 'min:6',]
             ]);
+        
+
+            if ($validatedData->fails()) {
+                // Pesan kesalahan validator ditemukan
+                $errors = $validatedData->errors();
+                $errorMessage = $errors->first();
+        
+                return response()->json([
+                    'error' => true,
+                    'message' => $errorMessage,
+                ]);
+            }else {
+                $validatedData['password'] = Hash::make($validatedData['password']);
     
-            $validatedData['password'] = Hash::make($validatedData['password']);
-    
-            Customer::create($validatedData);
-    
-            return response()->json([
-                'error'=>false,
-                'message' => 'success',
-            ]);
-        } catch (Exception $e) {
+                Customer::create($validatedData);
+        
+                return response()->json([
+                    'error'=> false,
+                    'message' => 'success',
+                ]); 
+            }
+
+        }catch (Exception $e) {
             return response()->json([
                 'error' => true,
-                'message' => 'Error : '.$e->getMessage()
+                'message' => 'Error: ' . $e->getMessage(),
             ]);
         } 
     }
@@ -60,13 +80,14 @@ class AuthenticateApiController extends Controller
                 return response()->json([
                     'error' => false,
                     'message' => 'success',
+                    'name' => $user->name,
                     'token' => $token
-                ]);
+                ]); 
             }else{
           
                 return response()->json([
                     'error' => true,
-                    'message' => 'Invalid credentials'
+                    'message' => 'Invalid email or password'
                 ]);
         
             }

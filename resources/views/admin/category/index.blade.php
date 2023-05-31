@@ -57,63 +57,19 @@
               Filter Categories
             </a>
           </div>  
-          <table class="table table-striped projects">
+          <table class="table table-striped projects" id="tblMaster">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Category Name</th>
-                {{-- <th>Size</th>
-                <th>Color</th> --}}
-                <th></th>
+                <th class="text-center">No</th>
+                <th class="text-center">Category Name</th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
-            <tbody> 
-              @foreach ($categories as $category )
-              <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>
-                  <a> {{ $category->name }}</a>
-                  <br />
-                  <small> Created {{ $category->created_at->format('d/m/Y H:i:s') }} </small>
-                </td>
-                
-                <td class="project-actions text-right">
-                  <div class="row">
-                    <div class="col">
-                      <a class="btn btn-primary btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#showCategoryModal-{{ $category->slug }}">
-                        <i class="fas fa-folder"> </i>
-                        View
-                      </a>
-                    </div>
-                    <div class="col">
-                      <a class="btn btn-primary btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal-{{ $category->slug }}">
-                        <i class="fas fa-folder"> </i>
-                        Edit
-                      </a>
-                    </div>
-                    <div class="col">
-                      <form action="/admin/categories/{{ $category->slug }}" method="post">
-                        @csrf
-                        @method('delete')
-                      <button class="btn btn-danger btn-sm" href="#" onclick="return confirm('Are you sure?')">
-                        <i class="fas fa-trash"> </i>
-                        Delete
-                      </button>
-                      </form>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
           </table>
         </div>
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
-      <div class="col-12 justify-content-center d-flex">
-        {{ $categories->links() }}
-      </div>
 
      
     </section>
@@ -168,19 +124,14 @@
           </div>
           <button type="submit" class="btn btn-primary mt-3">Add</button>
         </form>
-      </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
     </div>
   </div>
 </div>
 
 
-@foreach ($categories as $category)
+{{--@foreach ($categories as $category)
 <!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal-{{ $category->slug }}" tabindex="-1" aria-labelledby="editCategoryModal" aria-hidden="true">
+ <div class="modal fade" id="editCategoryModal-{{ $category->slug }}" tabindex="-1" aria-labelledby="editCategoryModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -232,17 +183,14 @@
           <button type="submit" class="btn btn-primary mt-3">Add</button>
         </form>
       </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
     </div>
   </div>
-</div>
-@endforeach
+</div> 
+@endforeach --}}
 
 
-@foreach ($categories as $category)
+
+{{-- @foreach ($categories as $category)
 <!-- Show Category Modal -->
 <div class="modal fade" id="showCategoryModal-{{ $category->slug }}" tabindex="-1" aria-labelledby="showCategoryModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -286,19 +234,15 @@
           </div>
         </form>
       </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
     </div>
   </div>
 </div>
-@endforeach
+@endforeach --}}
 
 
 
 <!-- Filter Modal -->
-<div class="modal fade" id="filterCategoryModal" tabindex="-1" aria-labelledby="filterCategoryModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="filterCategoryModal" tabindex="-1" aria-labelledby="filterCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -315,14 +259,11 @@
           <button type="submit" class="btn btn-primary mt-3">Filter</button>
         </form>
       </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
     </div>
   </div>
-</div>
-
+</div> --}}
+@endsection
+@section('scripts')
 <script>
   const name = document.querySelector('#name');
   const slug = document.querySelector('#slug');
@@ -345,6 +286,34 @@
           imgPreview.src = oFREvent.target.result;
       }
   }
+
+  var tableMaster = $('#tblMaster').DataTable({
+        "columnDefs": [{
+          "searchable": false,
+          "orderable": false,
+          "targets": 0,
+          render: function (data, type, row, meta) {
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }
+        }],
+        "aLengthMenu": [[5, 10, 25, 50, 75, 100, -1], [5, 10, 25, 50, 75, 100, "All"]],
+        "iDisplayLength": 10,
+        "order": [[1, 'asc']],
+        processing: true,
+        // serverSide: true,
+        responsive: true,
+        "oLanguage": {
+          'sProcessing': '<div id="processing" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(102, 102, 102); z-index: 30001; opacity: 0.8;"><p style="position: absolute; color: White; top: 50%; left: 45%;"><img src="{{ asset('images/ajax-loader.gif') }}"></p></div>Processing...'
+        },
+        ajax: '{{ route('categories.dashboard') }}',
+        columns: [
+          {data: null, name: null, className: "text-center"},
+          { data: 'name', name: 'name', className: "text-center"},
+          {data: 'action', name: 'action', className: "text-center"},
+          
+        ]
+      });
+
 </script>
 
 @endsection

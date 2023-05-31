@@ -75,4 +75,10 @@ class Product extends Model
         return $this->belongsToMany(Attribute::class, 'attribute_product')->withPivot('price');
     }
 
+    public function categories()
+    {
+        return $this->join('categories', 'products.category_id', '=', 'orders.id')
+                    ->select('categories.name');
+    }
+
 }

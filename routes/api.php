@@ -5,13 +5,14 @@ use App\Http\Controllers\Admin\LoginController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Api\Admin\ProductsApiController;
 use App\Http\Controllers\Api\Admin\CategoriesApiController;
 use App\Http\Controllers\Api\Admin\OrdersApiController;
 use App\Http\Controllers\Api\Admin\CustomersApiController;
 use App\Http\Controllers\Api\Customer\OrdersApiController as OrdersCustomer;
 use App\Http\Controllers\Api\Customer\AuthenticateApiController as CustomerAuth;
+use App\Http\Controllers\Api\Customer\ProductsApiController as CustomerProducts;
+
 
 use App\Http\Controllers\OrderApiController;
 use App\Models\Product;
@@ -35,8 +36,8 @@ Route::prefix('/')->group(function(){
     Route::post('login', [CustomerAuth::class, 'authenticate']);
     Route::post('register', [CustomerAuth::class, 'register']);
 
-    Route::get('/products', [ProductsApiController::class, 'index']);
-    Route::get('/products/{id}', [ProductsApiController::class, 'show']);
+    Route::get('/products', [CustomerProducts::class, 'index']);
+    Route::get('/products/{id}', [CustomerProducts::class, 'show']);
 
     Route::group(['middleware' => ['auth:sanctum', 'ability:customer']], function() {
         Route::get('/orders', [OrdersCustomer::class, 'index']);

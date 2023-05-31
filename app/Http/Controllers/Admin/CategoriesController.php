@@ -7,6 +7,8 @@ use App\Models\Category;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use DB;
+use DataTables;
 
 class CategoriesController extends Controller
 {
@@ -18,8 +20,28 @@ class CategoriesController extends Controller
         return view('admin.category.index', [
             'title' => 'Categories',
             'active' => 'categories',
-            'categories' => Category::latest()->filter(request(['search']))->paginate(7)->withQueryString(),
         ]);
+    }
+
+    public function dashboard(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Category::all();
+
+            return DataTables::of($data)
+                // ->editColumn('action', function($row) {
+                //     $var = '<center>';
+                //     $var .= '<a href="'.route('products.edit', ($row->name)).'" type="button" class="btn btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
+                //     $var .= '<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.($row->name).'\')"><i class="fas fa-trash"> </i></button>';
+                    
+                //     $var .= '</center>'; 
+                //     return $var;
+                // })
+                // ->rawColumns(['action'])
+                ->make(true);
+        }else {
+            return view('');
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Rizal Fire Shop Admin | {{ $title }}</title>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -27,15 +28,17 @@
   <link rel="stylesheet" href="{{ url('admin/plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ url('admin/plugins/summernote/summernote-bs4.min.css') }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+  <link href="{{ asset('admin/plugins/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  {{-- <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="{{ url('admin/images/AdminLTELogo.png') }}" alt="AdminLTELogo" height="60" width="60">
-  </div>
-   --}}
+  <div id="loading" style="display: none; margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,.4); z-index: 30001; opacity: 0.8;">
+    <p style="position: absolute; color: White; top: 50%; left: 50%;">
+      <img src={{ asset('images/ajax-loader.gif') }}>
+    </p>
+  </div>   
   <!-- Navbar -->
   @include('admin.layout.header')
   <!-- /.navbar -->
@@ -95,6 +98,9 @@
 <script src="{{ url('admin/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ url('admin/js/pages/dashboard.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<script src="{{ asset('admin/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

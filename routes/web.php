@@ -76,13 +76,17 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::post('change-status', 'DashboardController@changeStatusOrders' )->name('change-status-orders');
 
         // Product
-        Route::get('products/dashboard', 'ProductController@dashboard');
+        Route::Get('products', 'ProductsController@index')->name('products.index');
+        Route::get('products/dashboard', 'ProductsController@dashboard')->name('products.dashboard');
         Route::get('products/export','ProductsController@exportExcel');
         Route::get('products/checkSlug','ProductsController@checkSlug');
         Route::put('products/{product:slug}/update-stock', [ProductsController::class, 'updateStock'])->name('products.update-stock');
-        Route::resource('products', ProductsController::class);
+        Route::resource('products', ProductsController::class)->except(['index','destroy', 'edit']);
+        Route::get('products/edit/{slug}', 'ProductsController@edit')->name('products.edit');
+        Route::delete('products/delete/{id}', 'ProductsController@destroy')->name('products.delete');
         // Category
         Route::resource('categories', CategoriesController::class);
+        Route::get('categories/dashboard', 'CategoriesController@dashboard')->name('categories.dashboard');
         // Order
         Route::put('orders/{order:order_id}/add-resi', [OrdersController::class, 'add_resi'])->name('orders.add-resi');
         Route::resource('orders', OrdersController::class);

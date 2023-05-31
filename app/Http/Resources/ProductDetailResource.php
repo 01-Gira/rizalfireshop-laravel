@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,7 +13,7 @@ class ProductDetailResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
@@ -20,9 +21,18 @@ class ProductDetailResource extends JsonResource
             'description' => $this->description,
             'stock' => $this->stock,
             'price' => $this->price,
-            'category' => $this->whenLoaded('category'),
+            'category' => $this->category->name,
             'image' => $this->image,
+            'weight' => $this->weight,
+            'sale' => $this->sale,
             'created_at' => date_format($this->created_at, "Y/m/d, H:i:s")
         ];
     }
+
+    
+    // public function withResponse($request, $response)
+    // {
+    //     $apiResponse = new ApiResponse(false, 'success', $response->original);
+    //     $response->setContent($apiResponse->toJson()->content());
+    // }
 }

@@ -197,6 +197,10 @@ return [
 
         Cviebrock\EloquentSluggable\ServiceProvider::class,
 
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
+
+
     ],
 
     /*
@@ -213,6 +217,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'SlugService' => Cviebrock\EloquentSluggable\Facades\SlugService::class,
+
+
     ])->toArray(),
 
 ];
