@@ -13,11 +13,12 @@ class ProductsApiController extends Controller
     public function index()
     {
         try {
-            $products = Product::all();
+            $products = Product::latest()->where('stock', '>', 0)->filter(request(['search', 'category', 'sort', 'min_price' && 'max_price']))->paginate(9)->withQueryString(),
+
 
             return new ProductResource($products);
         } catch (Exception $e) {
-            return response()->json(['error'=>true, 'msg' => 'Error : '.$e->getMessage()]);
+            return response()->json(['error'=>true, 'message' => 'Error : '.$e->getMessage()]);
         }
     }
 
@@ -28,7 +29,7 @@ class ProductsApiController extends Controller
             // return response()->json(['data' => $product]);
             return new ProductDetailResource($product);
         } catch (Exception $e) {
-            return response()->json(['error'=> true,'msg' => 'Error : '.$e->getMessage()]);
+            return response()->json(['error'=> true,'message' => 'Error : '.$e->getMessage()]);
         }
     }
 }

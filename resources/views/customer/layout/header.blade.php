@@ -372,33 +372,8 @@
   </div>
 </div>
 
-
-<!-- Notification Modal -->
-<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="notificationModalLabel">Notification</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        @if(session()->has('success'))
-        <div class="alert alert-success">
-          <img src="/success.gif" alt="Success">
-          {{ session('success') }}
-        </div>
-        @elseif(session()->has('error'))
-        <div class="alert alert-danger">
-          <img src="/error.gif" alt="Error">
-          {{ session('error') }}
-        </div>
-        @endif
-      </div>
-    </div>
-  </div>
-</div>
-
-@if (session()->has('success'))
+@include('layouts._flash');
+{{-- @if (session()->has('success'))
   <script>
       $(function() {
           $('#notificationModal').modal('show');
@@ -421,5 +396,5 @@
           {{ session()->forget('error') }}
       });
     });
-</script>
+</script> --}}
 

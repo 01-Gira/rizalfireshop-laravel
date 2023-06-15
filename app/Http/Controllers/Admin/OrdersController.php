@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use DataTables;
+use DB;
 
 class OrdersController extends Controller
 {
@@ -18,6 +20,36 @@ class OrdersController extends Controller
             'active' => 'orders',
             'orders' => Order::latest()->filter(request(['search','status_transaction','sort']))->paginate(7)->withQueryString()
         ]);
+    }
+
+
+    public function dashboard(Request $request)
+    {
+        // dd($request->all());
+        if ($request->ajax()) {
+            $data = DB::table('orders as a')
+                ->select('a.order_id', 'a.customer_id','a.courier', 'a.total_price', 'a.transaction_status', 'a.status_order', 'a.transaction_id', 'b.id', 'b.name')
+                ->join('customers as b', 'a.customer_id', '=', 'b.id');
+
+            return DataTables::of($data)
+            ->editColumn('action', function($row) {
+                $var = '<center>';
+                if ($row->transaction_status == 'capture') {
+                    $var .= '<button type="button" class="btn btn-success btn-xs" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Add No Resi" onclick="addNoResi(\''.base64_encode($row->order_id).'\')"><i class="fas fa-truck"></i></button>';
+                    $var .= '<a href="#" type="button" class="btn btn-warning btn-xs" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
+                    $var .= '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteData(\''.($row->order_id).'\')"><i class="fas fa-trash"> </i></button>';
+                }else {
+                    $var .= '<a href="#" type="button" class="btn btn-warning btn-xs" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
+                    $var .= '<button type="button" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" onclick="deleteData(\''.($row->order_id).'\')"><i class="fas fa-trash"> </i></button>';
+                }
+               
+                $var .= '</center>'; 
+                return $var;
+            })
+            ->make(true);
+        }else {
+            return view('');
+        }
     }
 
     /**
@@ -69,16 +101,26 @@ class OrdersController extends Controller
         return redirect('/admin/orders')->with('danger', 'Order has been deleted!');
     }
 
-    public function add_resi(Request $request, Order $order) 
+    public function add_resi(Request $request, $p) 
     {
-        $validatedData = $request->validate([
-            'no_resi' => ['required']
-        ]);
-
-        $order->no_resi = $validatedData['no_resi'];
-        $order->transaction_status = 'delivered';
-        $order->save();
-
-        return redirect()->back()->with('success','No Resi has been addedd');
+        dd($p);
+        try {
+            // dd($request->param);
+            $order_id = base64_decode($request->input('param'));
+            dd($order_id);
+            $validatedData = $request->validate([
+                'no_resi' => ['required']
+            ]);
+            // dd($validatedData);
+            $order = Order::where('');
+            $order->no_resi = $validatedData['no_resi'];
+            $order->transaction_status = 'delivered';
+            $order->save();
+    
+            return redirect()->back()->with('success','No Resi has been addedd');
+        } catch (Exception $e) {
+            //throw $th;
+        }
+       
     }
 }

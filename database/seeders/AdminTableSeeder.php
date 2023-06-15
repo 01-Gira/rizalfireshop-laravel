@@ -18,7 +18,6 @@ class AdminTableSeeder extends Seeder
         $password = Hash::make('123456');
         $adminRecords = [
             [
-                'id' => 1,
                 'name' => 'Gira',
                 'mobile' => '081234567890', // Nomor telepon seluler dengan 13 digit
                 'email' => 'admin@admin.com',

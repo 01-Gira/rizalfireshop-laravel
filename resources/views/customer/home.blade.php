@@ -102,7 +102,7 @@
                   </div>
                   <div class="card-footer d-flex justify-content-between bg-light border">
                     <a href="/shop/product/{{ $product->slug }}" class="btn card-link"><i class="bi bi-eye"></i> View</a>
-                    <form action="{{ route('cart.add', $product) }}" method="post">
+                    <form action="{{ route('cart.add', $product) }}" method="post" id="form_id">
                       @csrf
                       <button type="submit" class="btn btn-danger card-link"><i class="bi bi-cart-plus"></i> Add to cart</button>
                     </form>
@@ -119,4 +119,10 @@
 
   </div><!-- /.container -->
 
+@endsection
+
+@section('scripts')
+<script>
+
+</script>
 @endsection

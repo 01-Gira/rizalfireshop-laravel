@@ -20,10 +20,19 @@ class LoginController extends Controller
         if (Auth::guard('customer')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->back()->with('success','Log in successfully!');
+            $carts = session('cart.items', []);
+
+            return redirect()->back()->with('sweet_alert', [
+                'icon' => 'success',
+                'title' => 'Success',
+                'text' => 'Successfully login. Happy Shopping!',
+            ]);
         }else{
-            return redirect()->back()->with([
-                'error' => 'Invalid Email or Password!',
+
+            return redirect()->back()->with('sweet_alert',[
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'Invalid email or password!',
             ]);
         }
 
@@ -32,12 +41,16 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('customer')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect()->back()->with('success','Log out successfull!');
+        return redirect()->back()->with('sweet_alert',[
+            'icon' => 'success',
+            'title' => 'Success',
+            'text' => 'Log out successfully!',
+        ]);
     }
 }

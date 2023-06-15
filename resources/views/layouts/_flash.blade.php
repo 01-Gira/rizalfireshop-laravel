@@ -8,22 +8,21 @@
 @endif
 
 @if (session()->has('sweet_alert.title'))
-	<script src="{{ asset('js/sweetalert2.min.js') }}"></script>
     <script>
-    	@if (session()->has('sweet_alert.timer'))
-	    	swal({
-	    	  type: '{!! session()->get('sweet_alert.type') !!}',
-			  title: '{!! session()->get('sweet_alert.title') !!}',
-			  text: '{!! session()->get('sweet_alert.text') !!}',
-			  timer: '{!! session()->get('sweet_alert.timer') !!}',
-			  showConfirmButton: '{!! session()->get('sweet_alert.showConfirmButton') !!}'
-			}).catch(swal.noop);
-		@else
-			swal({
-	    	  type: '{!! session()->get('sweet_alert.type') !!}',
-			  title: '{!! session()->get('sweet_alert.title') !!}',
-			  text: '{!! session()->get('sweet_alert.text') !!}'
-			});
-		@endif
+	@if (session()->has('sweet_alert.timer'))
+		 Swal.fire({
+			icon: '{!! session()->get('sweet_alert.icon') !!}',
+			title: '{!! session()->get('sweet_alert.title') !!}',
+			text: '{!! session()->get('sweet_alert.text') !!}',
+			timer: '{!! session()->get('sweet_alert.timer') !!}',
+			showConfirmButton: '{!! session()->get('sweet_alert.showConfirmButton') !!}'
+		}).catch(swal.noop);
+	@else
+		Swal.fire({
+			icon: '{!! session()->get('sweet_alert.icon') !!}',
+			title: '{!! session()->get('sweet_alert.title') !!}',
+			text: '{!! session()->get('sweet_alert.text') !!}'
+		});
+	@endif
     </script>
 @endif

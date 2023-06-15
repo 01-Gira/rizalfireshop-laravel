@@ -17,7 +17,7 @@ class Order extends Model
 
     protected $attributes = [
         'transaction_status' => 'unpaid', // nilai default untuk kolom payment_status
-        'status' => 'new'
+        'status_order' => 'new'
     ];
     
     public function scopeFilter($query, array $filters)

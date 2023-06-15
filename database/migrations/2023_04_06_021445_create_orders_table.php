@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('snap_token')->nullable();
             $table->string('no_resi')->nullable();
             $table->string('pdf_url')->nullable();
-            $table->string('status');
+            $table->string('status_order');
             $table->timestamps();
         });
     }

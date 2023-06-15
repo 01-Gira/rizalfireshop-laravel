@@ -15,20 +15,21 @@ class DashboardController extends Controller
     }
 
     public function newOrdersCount(){
-        $newOrdersCount = Order::where('status', 'new')->count();
+        $newOrdersCount = Order::where('status_order', 'new')->count();
 
         return response()->json((['newOrdersCount' => $newOrdersCount]));
     }
 
     public function changeStatusOrders(Request $request){
 
+        // dd($request->status);
         // Ambil status yang dikirim dari ajax
-        $status = $request->input('status');
-
+        $status = $request->status;
+        // dd($status);
         // $orders = Order::where('status', 'new')->get();
     
             // Ubah status semua order menjadi 'old'
-        Order::where('status', 'new')->update(['status' => $status]);
+        Order::where('status_order', 'new')->update(['status_order' => $status]);
 
         // Kirim response ke ajax
         return response()->json(['status' => 'success', 'message' => 'Order status has been updated to '.$status]);

@@ -21,31 +21,33 @@ class AuthenticateApiController extends Controller
             // ]);
 
             $validatedData = Validator::make($request->all(), [
-                'name' => ['required', 'max:60'],
-                'email' => ['required', 'unique:customers,email', 'email:dns'],
+                'name' => ['required', 'max:60', 'regex:/^[A-Za-z\s]+$/'],
+                'email' => ['required', 'unique:customers,email', 'email'],
                 'password' => ['required', 'min:6',]
             ]);
-        
 
             if ($validatedData->fails()) {
                 // Pesan kesalahan validator ditemukan
                 $errors = $validatedData->errors();
                 $errorMessage = $errors->first();
-        
+            
                 return response()->json([
                     'error' => true,
                     'message' => $errorMessage,
                 ]);
-            }else {
-                $validatedData['password'] = Hash::make($validatedData['password']);
-    
-                Customer::create($validatedData);
-        
+            } else {
+                $data = $validatedData->validated();
+                $data['password'] = Hash::make($data['password']);
+            
+                Customer::create($data);
+            
                 return response()->json([
-                    'error'=> false,
+                    'error' => false,
                     'message' => 'success',
-                ]); 
+                ]);
             }
+            
+            
 
         }catch (Exception $e) {
             return response()->json([

@@ -20,16 +20,29 @@ class OrderController extends Controller
     }
 
     public function payment_status(Request $request) {
-        $json = json_decode($request->get('json'));
-        // dd($json);
-        $order = Order::where('order_id', $request->input('order_id'))->first();
-        $order->transaction_id = isset($json->transaction_id) ? $json->transaction_id : null;
-        $order->payment_type = $json->payment_type;
-        $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
-        $order->transaction_status = isset($json->transaction_status) ? $json->transaction_status : null;
-        $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;   
-        // dd($order);
-        $order->save();
-        return back()->with('success','Payment with ' . $order->order_id . ' is ' . $order->transaction_status );
+        try {
+            $json = json_decode($request->get('json'));
+            // dd($json);
+            $order = Order::where('order_id', $request->input('order_id'))->first();
+            $order->transaction_id = isset($json->transaction_id) ? $json->transaction_id : null;
+            $order->payment_type = $json->payment_type;
+            $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
+            $order->transaction_status = isset($json->transaction_status) ? $json->transaction_status : null;
+            $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;   
+            // dd($order);
+            $order->save();
+            return back()->with('sweet_alert',[
+                'icon' => 'success',
+                'title' => 'Success',
+                'text' => 'Payment with ' . $order->order_id . ' is ' . $order->transaction_status
+            ]);
+        } catch (Exception $e) {
+            return back()->with('sweet_alert',[
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'Error :'.$e->getMesaage()
+            ]);
+        }
+       
     }
 }

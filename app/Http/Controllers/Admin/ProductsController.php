@@ -31,11 +31,14 @@ class ProductsController extends Controller
     public function dashboard(Request $request)
     {
         if ($request->ajax()) {
-            $data = DB::table(DB::raw("(
-                    SELECT a.name, a.stock, a.price, a.category_id, a.slug, b.name as category_name
-                    FROM products AS a
-                    JOIN categories AS b ON a.category_id = b.id) z"))
-                ->select(DB::raw("z.*"));
+            // $data = DB::table(DB::raw("(
+
+            $data = DB::table('products as a')
+                    ->select('a.name', 'a.stock', 'a.price', 'a.slug', 'b.name as category_name', 'b.id')
+                    ->join('categories as b', 'a.category_id', '=', 'b.id');
+                    // ->get();
+
+            // $data = Product::all();
 
             if (!empty($request->get('category'))) {
                 if ($request->get('category') != 0) {
@@ -44,14 +47,21 @@ class ProductsController extends Controller
             }
 
             return DataTables::of($data)
+            ->editColumn('checkall', function($row){
+                $var = '<center>';
+                $var .= '<input type="checkbox" name="check[]" value="'.$row->slug.'" id="checkbox-row">';
+                $var .= '</center>';
+                return $var;
+            })
             ->editColumn('action', function($row) {
                 $var = '<center>';
-                $var .= '<a href="'.route('products.edit', ($row->slug)).'" type="button" class="btn btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
-                $var .= '<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.($row->slug).'\')"><i class="fas fa-trash"> </i></button>';
+                $var .= '<a href="'.route('products.edit', base64_encode($row->slug)).'" type="button" class="btn btn-xs btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
+                $var .= '<button type="button" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.base64_encode($row->slug).'\')"><i class="fas fa-trash"> </i></button>';
                 
                 $var .= '</center>'; 
                 return $var;
             })
+            ->rawColumns(['checkall', 'action'])
             ->make(true);
         }else {
             return view('');
@@ -67,6 +77,7 @@ class ProductsController extends Controller
     }
 
     public function store(Request $request){
+        dd($request->all());
         $validatedData = $request->validate([
             'name' => ['required', 'max:70'],
             'slug'  => ['required', 'unique:products'],
@@ -134,31 +145,30 @@ class ProductsController extends Controller
         return redirect('/admin/products')->with('flash_notification',['level' => 'success', 'message' => 'Product has been updated!']);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $p)
     {
         try {
-            $check = Product::where('slug', $id)->first();
+            $slug = base64_decode($p);
+            // dd($slug);
+            $check = Product::where('slug', $slug)->first();
+            // dd($ch)
             if ($check) {
                 if ($check->image) {
                     Storage::delete($check->image);
                 }
                 
+                $indctr = 0;
+                $msg = 'Product '.$check->name.' has been deleted successfully!';
+
                 $check->delete();
-
-                Session::flash("flash_notification", [
-                    "level" => "danger",
-                    "message" => "Product has been deleted!"
-                ]);
-
-                return redirect()->route('products.index');
+                
+                return response()->json([ 'indctr' => $indctr, 'msg' => $msg]);
                 // return route('products.index')->with('flash_notification', ['level' => 'danger', 'message' => 'Product has been deleted!']);
             } else {
-                Session::flash("flash_notification", [
-                    "level" => "danger",
-                    "message" => "Product not found!"
-                ]);
+                $indctr = 1;
+                $msg = 'Data product is not found!';
 
-                return redirect()->route('products.index');
+                return response()->json([ 'indctr' => $indctr, 'msg' => $msg]);
             }
         } catch (Exception $e) {
             Session::flash("flash_notification", [

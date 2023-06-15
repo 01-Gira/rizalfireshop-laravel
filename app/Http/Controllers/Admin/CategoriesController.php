@@ -26,18 +26,19 @@ class CategoriesController extends Controller
     public function dashboard(Request $request)
     {
         if ($request->ajax()) {
-            $data = Category::all();
+            $data = DB::table('categories')
+                    ->select('name');
 
             return DataTables::of($data)
-                // ->editColumn('action', function($row) {
-                //     $var = '<center>';
-                //     $var .= '<a href="'.route('products.edit', ($row->name)).'" type="button" class="btn btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
-                //     $var .= '<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.($row->name).'\')"><i class="fas fa-trash"> </i></button>';
+                ->editColumn('action', function($row) {
+                    $var = '<center>';
+                    $var .= '<a href="'.route('products.edit', base64_decode($row->name)).'" type="button" class="btn btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
+                    $var .= '<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.base64_encode($row->name).'\')"><i class="fas fa-trash"> </i></button>';
                     
-                //     $var .= '</center>'; 
-                //     return $var;
-                // })
-                // ->rawColumns(['action'])
+                    $var .= '</center>'; 
+                    return $var;
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }else {
             return view('');
@@ -116,13 +117,32 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Request $request, $p)
     {
-        if($category->image){
-            Storage::delete($category->image);
+        try {
+            $name = base64_decode($p);
+            // dd($name);
+            $check = Category::where('name', $name)->first();
+            // dd($check);
+            if ($check) {
+                if($check->image){
+                    Storage::delete($category->image);
+                }
+                $indctr = 0;
+                $msg = 'Category ' .$check->name. ' has been deleted successfully!';
+
+                $check->delete();
+
+                return response()->json(['indctr' => $indctr, 'msg' => $msg]);
+            }else {
+                return response()->json(['indctr' => $indctr, 'msg' => $msg]);
+
+            }
+ 
+        } catch (Exception $e) {
+            return response()->json(['indctr' => 1, 'msg' => 'Error : '.$e->getMessage()]);
         }
-        Category::destroy($category->id);
-        return redirect()->back()->with('danger', 'Product has been deleted!');
+       
     }
 
     public function checkSlug(Request $request)
