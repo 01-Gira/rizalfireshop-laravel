@@ -116,6 +116,12 @@
             </a>
           </li> 
           <li class="nav-item d-none d-lg-block">
+            @auth
+            <p>{{ auth()->user()->name; }}</p>
+              
+            @endauth
+          </li>
+          <li class="nav-item d-none d-lg-block">
             <div class="dropdown">
               <a class="nav-link text-danger" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 @if ($cart)
@@ -158,8 +164,8 @@
               </ul>
             </div>
           </li>
+          @auth
           <li class="nav-item d-none d-lg-block">
-            @if (Auth::guard('customer')->check())
             <div class="dropdown">
               <a class="nav-link text-danger" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person"></i>
@@ -169,12 +175,12 @@
                 <li><a class="dropdown-item" href="/logout">Log out</a></li>
               </ul>
             </div>
-            @else
-              <a class="nav-link text-danger" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                  <i class="bi bi-person"></i>
-              </a>
-            @endif
           </li>
+          @else
+          <a class="nav-link text-danger" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-person"></i>
+          </a>
+          @endauth
         </ul>
       </div>
     </div>
@@ -260,7 +266,7 @@
                   />
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <i class="bi bi-lock-fill"></i>
+                      <i class="bi bi-lock"></i>
                     </div>
                   </div>
                   @error('password')
@@ -295,29 +301,13 @@
               <div class="content m-3">
                 <!-- Login form here -->
                 <div class="input-group mb-3">
-                  <input type="name" name="name" class="form-control
-                    @error('name')
-                    is-invalid
-                    @enderror" placeholder="Name" required/>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <i class="bi bi-person"></i>
-                    </div>
-                  </div>
-                  @error('name')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                  @enderror
-                </div>
-                <div class="input-group mb-3">
                   <input type="email" name="email" class="form-control
                     @error('email')
                     is-invalid
                     @enderror" placeholder="Email" required/>
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <i class="bi bi-person"></i>
+                      <i class="bi bi-envelope"></i>
                     </div>
                   </div>
                   @error('email')
@@ -325,6 +315,44 @@
                         {{ $message }}
                     </div>
                   @enderror
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="input-group mb-3">
+                      <input type="name" name="name" class="form-control
+                        @error('name')
+                        is-invalid
+                        @enderror" placeholder="First Name" required/>
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <i class="bi bi-person"></i>
+                        </div>
+                      </div>
+                      @error('name')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                      @enderror
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-group mb-3">
+                      <input type="name" name="name" class="form-control
+                        @error('name')
+                        is-invalid
+                        @enderror" placeholder="Last Name" required/>
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <i class="bi bi-person"></i>
+                        </div>
+                      </div>
+                      @error('name')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                      @enderror
+                    </div>
+                  </div>
                 </div>
                 <div class="input-group mb-3">
                   <input
@@ -339,7 +367,7 @@
                   />
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <i class="bi bi-lock-fill"></i>
+                      <i class="bi bi-lock"></i>
                     </div>
                   </div>
                   @error('password')
@@ -373,28 +401,3 @@
 </div>
 
 @include('layouts._flash');
-{{-- @if (session()->has('success'))
-  <script>
-      $(function() {
-          $('#notificationModal').modal('show');
-      });
-  </script>
-@elseif (session()->has('error'))
-  <script>
-    $(function() {
-        $('#notificationModal').modal('show');
-    });
-   
-  </script>
-@endif
-
-<script>
-   $(function() {
-      $('#notificationModal').on('hidden.bs.modal', function() {
-          // Hapus data session setelah modal ditutup
-          {{ session()->forget('success') }}
-          {{ session()->forget('error') }}
-      });
-    });
-</script> --}}
-

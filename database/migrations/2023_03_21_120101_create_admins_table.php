@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('mobile');
             $table->string('image')->nullable();
-            $table->tinyInteger('status')->default(1);
-            // $table->rememberToken();
+            $table->tinyInteger('status')->default(0);
+            $table->string('role')->nullable();
+            $table->rememberToken();
+            $table->timestamp('last_online')->nullable(); 
             $table->timestamps();
         });
     }

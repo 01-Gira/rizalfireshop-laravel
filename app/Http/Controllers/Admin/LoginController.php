@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Dotenv\Validator;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -23,14 +24,22 @@ class LoginController extends Controller
                 'password.required' => 'Password is required'
             ];
 
-            $credentials = $request->validate($rules, $customMessages);
+            $credentials = $request->validate($rules, $customMessages); 
             
             // dd($credentials);
 
             if (Auth::guard('admin')->attempt($credentials)) {
                 $request->session()->regenerate();
-                
-
+                $user = Auth::guard('admin')->user()->id;  
+                // dd($user);
+                if ($user) {
+                    // $adminId = $user->id;
+                    $admin = Admin::find($user);
+                    $admin->status = 1;
+                    $admin->last_online = Carbon::now();
+                    $admin->save();
+                    
+                }
 
                 return redirect()->intended('/admin/dashboard');
                 // return response()->json(['message' => 'Success Login']);
@@ -48,6 +57,15 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $user = Auth::guard('admin')->user()->id;  
+        // dd($user);
+        if ($user) {
+            // $adminId = $user->id;
+            $admin = Admin::find($user);
+            $admin->status = 0;
+            $admin->save();
+            
+        }
         Auth::guard('admin')->logout();
 
         $request->session()->invalidate();

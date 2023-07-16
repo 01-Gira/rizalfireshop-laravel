@@ -26,6 +26,8 @@ class Product extends Model
         });
 
         
+
+        
         $query->when($filters['sort'] ?? false, function($query, $sort) {
             $sort = explode(' ', $sort);
             return $query->orderBy($sort[0], $sort[1]);

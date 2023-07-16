@@ -19,11 +19,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,4 +39,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hasRole(string $role): bool
+    {
+        // Implement your logic to check if the user has the specified role
+        // You can fetch the user's roles from the database or any other source
+        
+        // Example logic to check if the user has the role
+        return $this->where('role', $role)->exists();
+    }
 }

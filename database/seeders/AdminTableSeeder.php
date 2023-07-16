@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 
 class AdminTableSeeder extends Seeder
@@ -23,7 +25,10 @@ class AdminTableSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'password' => $password,
                 'image' => '',
-                'status' => 1
+                'status' => 0,
+                'role' => 'superadmin',
+                'remember_token' => Str::random(10),
+
             ]
         ];
         Admin::insert($adminRecords);

@@ -44,7 +44,8 @@
     <p style="position: absolute; color: White; top: 50%; left: 50%;">
       <img src={{ asset('images/ajax-loader.gif') }}>
     </p>
-  </div>   
+  </div> 
+  
   <!-- Navbar -->
   @include('admin.layout.header')
   <!-- /.navbar -->
@@ -103,8 +104,6 @@
 <script src="{{ url('admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url('admin/js/adminlte.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ url('admin/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ url('admin/js/pages/dashboard.js') }}"></script>
 
@@ -112,6 +111,7 @@
 <script src="{{ url('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ url('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ url('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ url('admin/plugins/datatables-buttons/js/buttons.flash.min.js') }}"></script>
 <script src="{{ url('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ url('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 

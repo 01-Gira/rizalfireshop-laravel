@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->bigInteger('price');
             $table->unsignedBigInteger('category_id');
+            $table->json('tags')->nullable(); 
             $table->integer('weight');
             $table->string('image')->nullable();
             $table->string('sale')->nullable();

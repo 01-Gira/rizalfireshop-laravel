@@ -21,7 +21,7 @@
     </section>
     <!-- Main content -->
     <section class="content">
-    <form action="/admin/products" method="post" id="form_id" enctype="multipart/form-data"> 
+    <form action="/admin/products" method="post" id="form-id" enctype="multipart/form-data"> 
       @csrf
       <div class="row">
         <div class="col-md-12">
@@ -90,14 +90,11 @@
                   </div> --}}
                   <div class="form-group">
                     <label>Minimal</label>
-                    <select class="form-control select2" style="width: 100%;">
-                      <option selected="selected">Alabama</option>
-                      <option>Alaska</option>
-                      <option>California</option>
-                      <option>Delaware</option>
-                      <option>Tennessee</option>
-                      <option>Texas</option>
-                      <option>Washington</option>
+                    <select class="form-control select2" style="width: 100%;" name="category_id">
+                      <option selected="selected">Select Category</option>
+                      @foreach ($categories as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                      @endforeach
                     </select>
                   </div>
                   <div class="form-group">
@@ -118,12 +115,9 @@
                     <label for="tags">Tags</label>
                     <select class="form-control select2" name="tags[]" multiple="multiple" data-placeholder="Select a Tag">
                       <option>Alabama</option>
-                      <option>Alaska</option>
-                      <option>California</option>
-                      <option>Delaware</option>
-                      <option>Tennessee</option>
-                      <option>Texas</option>
-                      <option>Washington</option>
+                      @foreach ($tags as $item)
+                       <option value="{{ $item->name }}">{{ $item->name }}</option> 
+                      @endforeach
                     </select>
                   </div>
                   <div class="form-group">
@@ -207,30 +201,24 @@
     }
 
 
-    $('#form_id').submit(function(e, params){
-      // e.preventDefault();
-      var localParams = params || {};
 
-      if (!localParams.send) {
-        e.preventDefault();
-          swal({
-            title: 'Confirmation',
-            text: 'Are you sure want to save this product?',
-            type: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#ff2a2a',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '<i class="fa fa-thumbs-up"></i> Save',
-            cancelButtonText: '<i class="fa fa-thumbs-down"></i> Cancel',
-            allowOutsideClick: true,
-            allowEscapeKey: true,
-            allowEnterKey: true,
-            reverseButtons: false,
-            focusCancel: false,
-          }).then(function () {
-            $(e.currentTarget).trigger(e.type, { 'send': true });
-          }, function (dismiss) { if (dismiss === 'cancel') {} });
-      }
+    $('#form-id').on('submit', function(event){
+        event.preventDefault();
+
+        Swal.fire({
+        title: 'Are you sure?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Order'
+        }).then(function(result){
+        if(result.isConfirmed){
+          event.currentTarget.submit();
+        }
+      
+        }).catch(swal.noop);
+
     });
 
 </script>

@@ -42,6 +42,28 @@
             Dashboard
             </p>
         </a>
+        
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa-solid fa-user"></i>
+                <p>User</p>
+                <i class="fas fa-angle-left right"></i>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="/admin/users" class="nav-link {{ $active == 'users' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>All User</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link {{ $active == 'users' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Create User</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item">
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-box"></i>
@@ -71,13 +93,13 @@
             </a>
             </li>
             <li class="nav-item">
-            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
+            <a href="/admin/tags/index" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Tag</p>
             </a>
             </li>
             <li class="nav-item">
-            <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
+            <a href="/admin/attributes/index" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Attribute</p>
             </a>

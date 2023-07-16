@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('mobile')->nullable();
             $table->string('image')->nullable();
+            $table->string('status')->default(0);
+            $table->string('last_online')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\OrderCreatedNotification;
 
 class CheckoutController extends Controller
 {
@@ -189,8 +190,9 @@ class CheckoutController extends Controller
             $snapToken = $this->midtransService->checkout($transactionParams);
             $order->snap_token = $snapToken;
             $order->save();
-    
-    
+            $user = Auth::guard('customer')->user();
+            $user->notify(new OrderCreatedNotification($order));
+            // Notification::send($user, new OrderCreatedNotification);
             // dd($order);
             session()->forget('cart.items');
             // Order::create($validatedData);

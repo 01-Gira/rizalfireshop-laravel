@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
@@ -34,11 +35,13 @@ class ProductsController extends Controller
             // $data = DB::table(DB::raw("(
 
             $data = DB::table('products as a')
-                    ->select('a.name', 'a.stock', 'a.price', 'a.slug', 'b.name as category_name', 'b.id')
-                    ->join('categories as b', 'a.category_id', '=', 'b.id');
+                    ->select('a.name', 'a.stock', 'a.price', 'a.slug', 'b.name as category_name', 'b.id', 'a.created_at')
+                    ->join('categories as b', 'a.category_id', '=', 'b.id')
+                    ->orderBy('a.created_at', 'DESC');
                     // ->get();
 
             // $data = Product::all();
+            
 
             if (!empty($request->get('category'))) {
                 if ($request->get('category') != 0) {
@@ -49,7 +52,7 @@ class ProductsController extends Controller
             return DataTables::of($data)
             ->editColumn('checkall', function($row){
                 $var = '<center>';
-                $var .= '<input type="checkbox" name="check[]" value="'.$row->slug.'" id="checkbox-row">';
+                $var .= '<input type="checkbox" name="check[]" value="'.base64_encode($row->slug).'" class="btn-check"';
                 $var .= '</center>';
                 return $var;
             })
@@ -73,26 +76,26 @@ class ProductsController extends Controller
         $title = 'Products';
         $active = 'add_product';
         $categories = Category::all();
-        return view('admin.product.create', compact('title', 'active', 'categories'));
+        $tags = Tag::all();
+        return view('admin.product.create', compact('title', 'active', 'categories', 'tags'));
     }
 
     public function store(Request $request){
-        dd($request->all());
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:70'],
-            'slug'  => ['required', 'unique:products'],
-            'description' => ['required','max:255'],
-            'stock' => ['required'],
-            'price' => ['required'],
-            'category_id' => ['required'],
-            'weight' => ['required'],
-            'image' => ['image','file','max:1024']
-        ]
-        );
+        // dd($request->all());
+
+     
+
+        // dd($except_token);
+        // for ($i=0; $i < count(count($except_token['name'])) ; $i++) { 
+        //     # code...
+        // }
         if ($request->file('image')){
-            $validatedData['image'] = $request->file('image')->store('products-images');
+            $except_token['image'] = $request->file('image')->store('products-images');
         }
-        Product::create($validatedData);
+
+        $except_token['tags'] = json_encode($except_token['tags']);
+        // dd($except_token);
+        Product::create($except_token);
 
         return redirect('/admin/products')->with('flash_notification', ['level' => 'success', 'message' => 'Product has been added!']);
         // return $request;
@@ -153,7 +156,7 @@ class ProductsController extends Controller
             $check = Product::where('slug', $slug)->first();
             // dd($ch)
             if ($check) {
-                if ($check->image) {
+                if ($check->image != null) {
                     Storage::delete($check->image);
                 }
                 
@@ -193,6 +196,55 @@ class ProductsController extends Controller
 
 
         return redirect()->back()->with('flash_notification',['level' => 'success', 'message' => 'Product stock has been updated!']);
+    }
+
+    public function multipleEdit(Request $request)
+    {
+        // dd($request->slug);
+        $slug =$request->slug;
+        // dd($slug);
+        foreach ($slug as $item) {
+            // dd($item);
+            $arraySlug[] = [
+                'slug' => base64_decode($item)
+            ];
+        }
+
+        // dd($arraySlug);
+        $check = Product::whereIn('slug', $arraySlug)->get();
+        dd($check);
+    }
+
+    public function multipleDelete(Request $request)
+    {
+        try {
+             // dd($request->slug);
+            $slug =$request->slug;
+            // dd($slug);
+            foreach ($slug as $item) {
+                // dd($item);
+                $arraySlug[] = [
+                    'slug' => base64_decode($item)
+                ];
+            }
+
+            
+            $check = Product::whereIn('slug', $arraySlug)->get();
+
+            foreach ($check as $item) {
+                if ($item->image != null) {
+                    Storage::delete($item->image);
+                }
+            }
+
+            Product::whereIn('slug', $arraySlug)->delete();
+
+            return response()->json(['indctr' => 0, 'message' => 'Data berhasil dihapus!']);
+        } catch (Exception $e) {
+            return response()->json(['indctr' => 1, 'message' => 'Error : '.$e]);
+
+        }
+       
     }
 
     public function exportExcel()

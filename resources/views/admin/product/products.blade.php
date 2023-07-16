@@ -31,6 +31,8 @@
             <div class="col-sm-4">
               <a class="btn btn-success btn-sm" href="/admin/products/create">
                 <i class="fas fa-plus"> </i>
+                <div class="spinner-border spinner-border-sm" role="status" id="btn-loading">
+                </div>
                 Create Product
               </a>
             </div>        
@@ -81,6 +83,7 @@
 
 @section('scripts')
     <script>
+      $('#btn-loading').hide();
       var tableMaster = $('#tblMaster').DataTable({  
         "columnDefs": [{
           "searchable": false,
@@ -92,7 +95,6 @@
         }],
         "aLengthMenu": [[5, 10, 25, 50, 75, 100, -1], [5, 10, 25, 50, 75, 100, "All"]],
         "iDisplayLength": 10,
-        "order": [[1, 'asc']],
         processing: true,
         responsive: true,
         "oLanguage": {
@@ -103,27 +105,32 @@
           {
               extend: 'copy',
               text: '<i class="fas fa-copy"></i> Copy', // Menambahkan ikon dan mengubah teks tombol
-              className: 'btn btn-primary', // Mengubah tampilan tombol dengan kelas Bootstrap
+              className: 'btn btn-primary',
+              columns: [1,2,3,4]  // Mengubah tampilan tombol dengan kelas Bootstrap
           },
           {
               extend: 'csv',
               text: '<i class="fas fa-file-csv"></i> CSV', // Menambahkan ikon dan mengubah teks tombol
               className: 'btn btn-success', // Mengubah tampilan tombol dengan kelas Bootstrap
+              columns: [1,2,3,4]
           },
           {
               extend: 'excel',
               text: '<i class="fas fa-file-excel"></i> Excel', // Menambahkan ikon dan mengubah teks tombol
               className: 'btn btn-info', // Mengubah tampilan tombol dengan kelas Bootstrap
+              columns: [1,2,3,4]
           },
           {
               extend: 'pdf',
               text: '<i class="fas fa-file-pdf"></i> PDF', // Menambahkan ikon dan mengubah teks tombol
               className: 'btn btn-danger', // Mengubah tampilan tombol dengan kelas Bootstrap
+              columns: [1,2,3,4]
           },
           {
               extend: 'print',
               text: '<i class="fas fa-print"></i> Print', // Menambahkan ikon dan mengubah teks tombol
               className: 'btn btn-secondary', // Mengubah tampilan tombol dengan kelas Bootstrap
+              columns: [1,2,3,4]
           },
           {
             text: '<i class="fas fa-pencil"></i> Edit',
@@ -212,9 +219,150 @@
         }).catch(swal.noop)
         
       }
+      var checkedData = [];
+      $('.check-all').on('click', function(){
+
+        if($(this).is(':checked')){
+          var rows = tableMaster.rows({'search':'applied'}).nodes();
+          $('input[type="checkbox"]', rows).prop('checked', true);
+          var slugs = $('input[type="checkbox"]:checked').serializeArray();
+          checkedData = slugs.map(function(item){
+            return item.value;
+          });
+          console.log(checkedData);
+        } else {
+          var rows = tableMaster.rows({'search':'applied'}).nodes();
+          $('input[type="checkbox"]', rows).prop('checked', false);
+          checkedData = [];
+          console.log(checkedData);
+
+        }
+      });
+
+      $(document).on('change', '.btn-check', function() {
+        checkedData = []; // Reset nilai checkedData menjadi array kosong
+        $('.btn-check:checked').each(function() {
+          var value = $(this).val();
+          checkedData.push(value);
+        });
+      });
 
       $('.edit-checkbox').on('click', function(){
-        Swal.fire('Edit', 'Are you sure?', 'question');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, edit it!'
+        }).then(function (result) {
+          $('#loading').show();
+
+          if(result.isConfirmed){
+            let url = '{{ route('products.edit-multiple') }}';
+            // let token = $('meta[name="csrf-token"]').attr("content");
+            if(checkedData == 0){
+              $('#loading').hide();
+              Swal.fire('Danger', 'You have no data checked!', 'error');
+
+            }else {
+            $.ajax({
+              url: url,
+              type: 'GET',
+              data : {
+                'slug' : checkedData
+              },
+              success : function(response) {
+                $('#loading').hide();
+               
+                if(response.indctr == 0){
+                  Swal.fire('Success', response.message, 'success');
+                }else {
+                  Swal.fire('Error', response.message, 'error');
+                }
+              },
+              error : function(xhr){
+                $('#loading').hide();
+                Swal.fire('Danger', xhr.responseText, 'error');
+
+                console.log(xhr.responseText);
+              }
+            });
+            }
+           
+          }else {
+            $('#loading').hide();
+                // Batalkan penghapusan
+            Swal.fire('Cancelled', 'Deletion cancelled.', 'info');
+
+          }
+         
+        }).catch(swal.noop)
+        
       });
+
+
+      $('.delete-checkbox').on('click', function(){
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(function (result) {
+          $('#loading').show();
+
+          if(result.isConfirmed){
+            let url = '{{ route('products.destroy-multiple') }}';
+            // let token = $('meta[name="csrf-token"]').attr("content");
+            console.log(checkedData);
+            if(checkedData == 0){
+              $('#loading').hide();
+              Swal.fire('Danger', 'You have no data checked!', 'error');
+
+            }else {
+              $.ajax({
+              url: url,
+              type: 'GET',
+              data : {
+                'slug' : checkedData
+              },
+              success : function(response) {
+                $('#loading').hide();
+                tableMaster.ajax.reload();  
+
+                if(response.indctr == 0){
+                  $('.check-all').prop('checked', false);
+                  Swal.fire('Success', response.message, 'success');
+                }else {
+                  Swal.fire('Error', response.message, 'error');
+                }
+                
+              },
+              error : function(xhr){
+                $('#loading').hide();
+                Swal.fire('Danger', xhr.responseText, 'error');
+
+                console.log(xhr.responseText);
+              }
+            });
+            }
+            
+          }else {
+            $('#loading').hide();
+                // Batalkan penghapusan
+            Swal.fire('Cancelled', 'Deletion cancelled.', 'info');
+
+          }
+         
+        }).catch(swal.noop)
+        
+      });
+
+      
+  
     </script>
 @endsection

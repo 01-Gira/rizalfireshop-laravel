@@ -5,6 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Notifications\OrderStatusNotification;
+use App\Notifications\AdminOrderStatusNotification;
+
+
 
 class OrderController extends Controller
 {
@@ -31,6 +35,12 @@ class OrderController extends Controller
             $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;   
             // dd($order);
             $order->save();
+
+            $user = auth()->guard('customer')->user();
+            $admin = Admin()->where('role', 'package')->get();
+            $user->notify(new OrderStatusNotification($order));
+            $admin->notify(new AdminOrderStatusNotification($order, $user));
+
             return back()->with('sweet_alert',[
                 'icon' => 'success',
                 'title' => 'Success',

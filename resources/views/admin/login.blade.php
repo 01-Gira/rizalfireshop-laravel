@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdminLTE 3 | Log in (v2)</title>
+    <title>Rizal Fire Shop | Log in</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link
@@ -16,8 +16,13 @@
     <link rel="stylesheet" href="{{ url('admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('admin/css/adminlte.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url('admin/plugins/sweetalert2/sweetalert2.min.css') }}">
+
   </head>
   <body class="hold-transition login-page">
+    @include('layouts._flash');
+
     <div class="login-box">
       <!-- /.login-logo -->
       <div class="card card-outline card-primary">
@@ -96,5 +101,8 @@
     <script src="{{ url('admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ url('admin/js/adminlte.min.js') }}"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   </body>
 </html>

@@ -119,9 +119,6 @@
 
 @section('scripts')
 <script>
-    $('#form_cart').submit(function(e, params){
-        e.preventDefault();
 
-    });
 </script>
 @endsection

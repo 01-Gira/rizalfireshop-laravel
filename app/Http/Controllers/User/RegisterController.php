@@ -20,6 +20,10 @@ class RegisterController extends Controller
 
         Customer::create($validatedData);
 
-        return redirect()->back()->with('success','Register successfully! you can log in now');
+        return redirect()->back()->with('sweet_alert',[
+            'icon' => 'success',
+            'title' => 'Successfully',
+            'text' => 'Register successfully! you can log in now'
+        ]);
     }
 }

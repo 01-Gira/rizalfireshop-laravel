@@ -16,9 +16,6 @@
    
     {{-- Icon Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    
-    {{-- Icon BoxIcons --}}
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     {{-- Font --}}
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +30,9 @@
     <link href="{{ url('customer/css/style.css') }}" rel="stylesheet">
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="https://kit.fontawesome.com/45fc3d203c.js" crossorigin="anonymous"></script>
+
 
 </head>
 <body>

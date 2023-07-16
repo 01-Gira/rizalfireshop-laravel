@@ -82,7 +82,10 @@
                 <div class="col">
                     <p>Shipping</p>
                     <hr>
-                    <div class="form-group">
+                    <div class="form-group" id="courier-text">
+                       <p>Silahkan pilih lokasi terlebih dahulu untuk memunculkan opsi kurir</p>
+                    </div>
+                    <div class="form-group" id="courier">
                         <label for="courier">Courier</label>
                         <select name="courier" id="courier" class="form-control" required>
                             <option value="">Select Courier</option>
@@ -91,10 +94,10 @@
                         @endforeach
                         </select>  
                     </div>
-                    <div class="form-group">
+                    <div class="form-group"id="courier-service">
                         <label for="service">Service:</label>
                         <select class="form-control" name="courier_service" id="service">
-                          <option value="">Select Service</option>
+                          <option>Select Service</option>
                         </select>
                       </div>
                 </div>
@@ -113,7 +116,12 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-danger">CREATE ORDER</button>
+            <button type="submit" class="btn btn-danger" id="btn-submit">CREATE ORDER
+                <div class="spinner-border spinner-border-sm" role="status" id="btn-loading">
+                    <span class="sr-only"></span>
+                </div>
+            </button>
+            
         </div>
     </div>
     </form>
@@ -123,9 +131,15 @@
 
 @section('scripts')
 <script>
+    $('#courier').hide();
+    $('#courier-service').hide();
+    $('#btn-loading').hide();
     // Ketika pilihan provinsi diubah
     $('select[name="province"]').on("change", function () {
         let provinceId = $(this).val();
+        $("select[name=courier_service]").empty();
+        $('#total').text("Rp. 0");
+        $('#total_price').empty();
 
         if (provinceId) {
             $.ajax({
@@ -139,6 +153,9 @@
                             '<option value="' + key + '">' + value + "</option>"
                         );
                     });
+                    $('#courier-text').hide();
+                    $('#courier').show();
+                    $('#courier-service').show();
                 },
                 error : function(xhr) {
                     console.log(xhr.responseText)
@@ -154,6 +171,9 @@
     $("select[name=courier]").on("change", function () {
         $("select[name=courier_service]").empty();
         $('#total').text("Rp. 0");
+        $('#total_price').empty();
+        $('#btn-loading').show();
+        $('#btn-submit').prop('disabled', true);
 
         var courier = $(this).val(); // Ambil nilai kurir yang dipilih
         var city_destination = $("select[name=city_destination]").val(); // Ambil nilai destination
@@ -171,6 +191,9 @@
             },
             success: function (response) {
                 // Tampilkan data ongkos kirim ke pengguna
+                $('#btn-loading').hide();
+                $('#btn-submit').prop('disabled', false);
+
                 var costs = response[0].costs;
                 var options = "";
                 for (var i = 0; i < costs.length; i++) {
@@ -216,6 +239,7 @@
         $("span#total").text("Rp." + number_format(total, 0, ",", "."));
         $("input[name=total_price]").val(total);
     }
+
 
     function number_format(number, decimals, dec_point, thousands_sep) {
         decimals = decimals || 0;
@@ -275,5 +299,5 @@
 
 
 
-</script>
+</script>   
 @endsection
