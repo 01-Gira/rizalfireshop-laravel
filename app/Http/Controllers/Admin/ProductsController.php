@@ -60,7 +60,6 @@ class ProductsController extends Controller
                 $var = '<center>';
                 $var .= '<a href="'.route('products.edit', base64_encode($row->slug)).'" type="button" class="btn btn-xs btn-warning" style="margin-right: 3px;" data-toggle="tooltip" data-placement="top" title="Edit" ><i class="fas fa-pencil-alt"></i></a>';
                 $var .= '<button type="button" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="deleteData(\''.base64_encode($row->slug).'\')"><i class="fas fa-trash"> </i></button>';
-                
                 $var .= '</center>'; 
                 return $var;
             })
